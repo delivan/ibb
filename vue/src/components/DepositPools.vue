@@ -14,7 +14,7 @@
 			<div v-if="Array.isArray(pools)" class="table-rows">
 				<div v-for="pool in pools" v-bind:key="pool.id" class="table-row" @click="clickAsset(pool)">
 					<div class="table-cell">{{ pool.Asset }}</div>
-					<div class="table-cell">{{ pool.DepositApy / 10000 }}%</div>
+					<div class="table-cell">{{ parseFloat(pool.DepositApy / 10000).toFixed(2) }}%</div>
 					<div class="table-cell">{{ `${Number.isNaN(parseFloat(pool.AssetBalance)) ? 0 : parseFloat(pool.AssetBalance) / 1000000} ${pool.Asset}` }}</div>
 				</div>
 			</div>
