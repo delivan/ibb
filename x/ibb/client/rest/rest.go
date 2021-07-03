@@ -41,10 +41,16 @@ func RegisterRoutes(clientCtx client.Context, r *mux.Router) {
 	registerQueryRoutes(clientCtx, r)
 	registerTxHandlers(clientCtx, r)
 
+	registerQueryRoutes(clientCtx, r)
+	registerTxHandlers(clientCtx, r)
+
 }
 
 func registerQueryRoutes(clientCtx client.Context, r *mux.Router) {
 	// this line is used by starport scaffolding # 3
+	r.HandleFunc("/ibb/claim2s/{id}", getClaim2Handler(clientCtx)).Methods("GET")
+	r.HandleFunc("/ibb/claim2s", listClaim2Handler(clientCtx)).Methods("GET")
+
 	r.HandleFunc("/ibb/claims/{id}", getClaimHandler(clientCtx)).Methods("GET")
 	r.HandleFunc("/ibb/claims", listClaimHandler(clientCtx)).Methods("GET")
 
@@ -78,6 +84,10 @@ func registerQueryRoutes(clientCtx client.Context, r *mux.Router) {
 
 func registerTxHandlers(clientCtx client.Context, r *mux.Router) {
 	// this line is used by starport scaffolding # 4
+	r.HandleFunc("/ibb/claim2s", createClaim2Handler(clientCtx)).Methods("POST")
+	r.HandleFunc("/ibb/claim2s/{id}", updateClaim2Handler(clientCtx)).Methods("POST")
+	r.HandleFunc("/ibb/claim2s/{id}", deleteClaim2Handler(clientCtx)).Methods("POST")
+
 	r.HandleFunc("/ibb/claims", createClaimHandler(clientCtx)).Methods("POST")
 	r.HandleFunc("/ibb/claims/{id}", updateClaimHandler(clientCtx)).Methods("POST")
 	r.HandleFunc("/ibb/claims/{id}", deleteClaimHandler(clientCtx)).Methods("POST")

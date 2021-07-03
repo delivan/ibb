@@ -20,6 +20,12 @@ func NewQuerier(k Keeper, legacyQuerierCdc *codec.LegacyAmino) sdk.Querier {
 
 		switch path[0] {
 		// this line is used by starport scaffolding # 2
+		case types.QueryGetClaim2:
+			return getClaim2(ctx, path[1], k, legacyQuerierCdc)
+
+		case types.QueryListClaim2:
+			return listClaim2(ctx, k, legacyQuerierCdc)
+
 		case types.QueryGetClaim:
 			return getClaim(ctx, path[1], k, legacyQuerierCdc)
 

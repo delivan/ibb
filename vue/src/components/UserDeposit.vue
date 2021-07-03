@@ -155,7 +155,7 @@ export default {
 				asset: pool.Asset,
 				denom: `u${pool.Asset.toLocaleLowerCase()}`
 			}
-			await this.$store.dispatch(`sapienscosmos.ibb.ibb/sendMsgCreateClaim`, {
+			await this.$store.dispatch(`sapienscosmos.ibb.ibb/sendMsgCreateClaim2`, {
 				value,
 				fee: []
 			})
