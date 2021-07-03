@@ -335,39 +335,35 @@ export default {
 		},
 		async acceptOffer(offer) {
 			this.isAcceptLoading = true
-			console.log(offer)
 			const loggedAddress = this.$store.getters['common/wallet/address']
-			const asset = offer.denom.toLocaleUpperCase().split('U').pop()
-			const value = {
-				creator: loggedAddress,
-				blockHeight: 0,
-				asset: asset,
-				amount: offer.amount,
-				denom: offer.denom
-			}
-
-			await this.$store.dispatch(`sapienscosmos.ibb.ibb/sendMsgCreateBorrow`, {
-				value,
-				fee: []
-			})
-			await this.$store.dispatch('sapienscosmos.ibb.ibb/QueryPoolLoad', {
-				options: { all: true },
-				params: {}
-			})
-			await this.$store.dispatch('sapienscosmos.ibb.ibb/QueryUserLoad', {
-				options: { all: true },
-				params: {
-					id: this.$store.getters['common/wallet/address']
-				}
-			})
 			await this.$store.dispatch('sapienscosmos.ibb.ibb/sendMsgChooseOffer', {
 				value: {
 					creator: loggedAddress,
-					nftId: 8,
-					OfferId: 0
+					nftId: offer.nftId,
+					OfferId: offer.id
 				},
 				fee: []
 			})
+
+			await Promise.all([
+				this.$store.dispatch('sapienscosmos.ibb.ibb/QueryPoolLoad', {
+					options: { all: true },
+					params: {}
+				}),
+				this.$store.dispatch('sapienscosmos.ibb.ibb/QueryUserLoad', {
+					options: { all: true },
+					params: {
+						id: this.$store.getters['common/wallet/address']
+					}
+				}),
+				this.$store.dispatch('sapienscosmos.ibb.ibb/QueryNftLoad', {
+					options: { all: true },
+					params: {
+						id: this.$store.getters['common/wallet/address']
+					}
+				})
+			])
+
 			this.$emit('click-outside')
 		},
 		async submit() {

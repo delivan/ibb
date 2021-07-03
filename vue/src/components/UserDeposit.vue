@@ -151,7 +151,6 @@ export default {
 		async clickClaim(pool, e, loadingIndex) {
 			e.stopPropagation()
 			this.loadingClaimPoolIndecies = this.loadingClaimPoolIndecies.concat([loadingIndex])
-			console.log(this.loadingClaimPoolIndecies)
 			const value = {
 				creator: this.$store.getters['common/wallet/address'],
 				asset: pool.Asset,
@@ -168,7 +167,6 @@ export default {
 				}
 			})
 			this.loadingClaimPoolIndecies = this.loadingClaimPoolIndecies.filter((index) => index !== loadingIndex)
-			console.log(this.loadingClaimPoolIndecies)
 		}
 	}
 }

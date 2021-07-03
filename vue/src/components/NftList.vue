@@ -4,7 +4,7 @@
 		<div class="all-nfts">
 			<div v-if="Array.isArray(userNftList) && userNftList.length > 0" class="sub-title">My NFTs</div>
 			<div v-if="Array.isArray(userNftList) && userNftList.length > 0" class="my-nfts">
-				<div v-for="nft in userNftList" v-bind:key="nft.id" class="card" :class="nft.OwnerAddress === 'in escrow' ? 'escrow' : ''" @click="clickNftCard(nft)">
+				<div v-for="nft in userNftList" v-bind:key="nft.id" class="card" @click="clickNftCard(nft)">
 					<div class="media">
 						<video v-if="nft.ImageUrl.split('.').pop() === 'mp4'" :src="nft.ImageUrl" autoplay="true" loop="true" mute="true" playsinline="true" />
 						<img v-else :src="nft.ImageUrl" />
@@ -13,6 +13,7 @@
 						<div class="collection">{{ nft.Collection }}</div>
 						<div class="name">{{ nft.Name }}</div>
 					</div>
+					<img v-if="nft.OwnerAddress === 'in escrow'" class="escrow" src="@/assets/images/icons/escrow.png" />
 				</div>
 			</div>
 			<div class="sub-title">NFTs on List</div>
@@ -46,6 +47,13 @@
 	margin-bottom: 10px;
 }
 
+.nfts-in-escrow {
+	display: flex;
+	flex-wrap: wrap;
+	margin-bottom: 8px;
+	position: relative;
+}
+
 .all-nfts {
 	margin-top: 16px;
 	padding: 24px 0 0 24px;
@@ -54,6 +62,7 @@
 }
 
 .my-nfts {
+	margin-top: 16px;
 	display: flex;
 	flex-wrap: wrap;
 	margin-bottom: 8px;
@@ -64,17 +73,22 @@
 	flex-wrap: wrap;
 }
 
+.escrow {
+	position: absolute;
+	top: -8px;
+	left: -12px;
+	width: 224px;
+	height: 308px;
+}
+
 .card {
+	position: relative;
 	width: 100%;
 	max-width: 200px;
 	margin-right: 24px;
 	margin-bottom: 24px;
 	border: 1px solid rgba(255, 255, 255, 0.6);
 	border-radius: 10px;
-}
-
-.card.escrow {
-	opacity: 0.3;
 }
 
 .card:hover {
@@ -128,6 +142,15 @@ export default {
 		loggedAddress() {
 			return this.$store.getters['common/wallet/address']
 		},
+		nftListInEscrow() {
+			const nftList =
+				this.$store.getters['sapienscosmos.ibb.ibb/getNftLoad']({
+					params: {
+						...(this.loggedAddress && { id: this.loggedAddress })
+					}
+				})?.DashboardNft ?? []
+			return nftList.filter((nft) => nft.OwnerAddress === 'in escrow')
+		},
 		nftList() {
 			const nftList =
 				this.$store.getters['sapienscosmos.ibb.ibb/getNftLoad']({
@@ -135,7 +158,7 @@ export default {
 						...(this.loggedAddress && { id: this.loggedAddress })
 					}
 				})?.DashboardNft ?? []
-			return nftList
+			return nftList.filter((nft) => nft.OwnerAddress !== 'in escrow')
 		},
 		userNftList() {
 			const userNftList =
@@ -144,11 +167,13 @@ export default {
 						id: this.loggedAddress
 					}
 				})?.UserNft ?? []
-			return userNftList
+
+			return this.nftListInEscrow.concat(userNftList)
 		}
 	},
 	methods: {
 		clickNftCard(nft) {
+			console.log(nft)
 			this.$emit('click-nft-card', nft)
 		}
 	}
