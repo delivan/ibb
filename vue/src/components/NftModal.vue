@@ -362,7 +362,9 @@ export default {
 			})
 			await this.$store.dispatch('sapienscosmos.ibb.ibb/sendMsgChooseOffer', {
 				value: {
-					nftId: offer.nftId
+					creator: loggedAddress,
+					nftId: 8,
+					OfferId: 0
 				},
 				fee: []
 			})
