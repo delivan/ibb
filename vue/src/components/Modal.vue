@@ -25,7 +25,7 @@
 						</div>
 						<div v-if="type === 'Borrow'" class="value">Borrow Limit: {{ currentBollowLimitAssetAmount.toFixed(6) }} {{ Asset }}</div>
 						<div v-if="type === 'Repay'" class="value">
-							Repay Balance : {{ Number.isNaN(parseFloat(AssetBorrow)) ? 0 : parseFloat(AssetBorrow) / 1000000 }} + {{ BorrowAccrued / 1000000 }} {{ Asset }}
+							Repay Balance : {{ Number.isNaN(parseFloat(AssetBorrow)) ? 0 : parseFloat(AssetBorrow) / 1000000 + BorrowAccrued / 1000000 }} {{ Asset }}
 						</div>
 					</div>
 					<div class="content">
@@ -63,7 +63,15 @@
 					<div class="content">
 						<div class="property">Balance</div>
 						<div class="value">
-							{{ type === 'Deposit' || type === 'Withdraw' ? (AssetDeposit ? AssetDeposit / 1000000 : 0) : AssetBorrow ? AssetBorrow / 1000000 : 0 }}
+							{{
+								type === 'Deposit' || type === 'Withdraw'
+									? AssetDeposit
+										? AssetDeposit / 1000000
+										: 0
+									: AssetBorrow
+									? AssetBorrow / 1000000 + BorrowAccrued / 1000000
+									: 0 + BorrowAccrued / 1000000
+							}}
 							{{ Asset }}
 						</div>
 					</div>
@@ -102,8 +110,8 @@
 <style scoped>
 .modal-wrapper {
 	width: 100vw;
-	min-height: 100%;
-	position: absolute;
+	height: 100%;
+	position: fixed;
 	top: 0;
 	left: 0;
 	display: flex;

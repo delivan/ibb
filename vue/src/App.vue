@@ -43,12 +43,7 @@ export default {
 		}
 	},
 	async created() {
-		await this.$store.dispatch('common/env/init', {
-			apiNode: 'http://188.166.218.116:1317',
-			rpcNode: 'http://188.166.218.116:26657',
-			wsNode: 'ws://188.166.218.116:26657/websocket',
-			getTXApi: 'http://188.166.218.116:26657/tx?hash=0x'
-		})
+		await this.$store.dispatch('common/env/init')
 		this.initialized = true
 	},
 	errorCaptured(err) {
