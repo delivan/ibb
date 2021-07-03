@@ -84,3 +84,8 @@ const (
 	ClaimKey      = "Claim-value-"
 	ClaimCountKey = "Claim-count-"
 )
+
+const (
+	Claim2Key      = "Claim2-value-"
+	Claim2CountKey = "Claim2-count-"
+)

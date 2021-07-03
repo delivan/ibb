@@ -48,3 +48,8 @@ const (
 	QueryGetClaim  = "get-claim"
 	QueryListClaim = "list-claim"
 )
+
+const (
+	QueryGetClaim2  = "get-claim2"
+	QueryListClaim2 = "list-claim2"
+)

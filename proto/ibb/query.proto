@@ -4,6 +4,7 @@ package sapienscosmos.ibb.ibb;
 import "google/api/annotations.proto";
 import "cosmos/base/query/v1beta1/pagination.proto";
 // this line is used by starport scaffolding # 1
+import "ibb/claim2.proto";
 import "ibb/claim.proto";
 import "ibb/nft.proto";
 import "ibb/txHistory.proto";
@@ -23,6 +24,13 @@ option go_package = "github.com/sapiens-cosmos/ibb/x/ibb/types";
 // Query defines the gRPC querier service.
 service Query {
     // this line is used by starport scaffolding # 2
+	rpc Claim2(QueryGetClaim2Request) returns (QueryGetClaim2Response) {
+		option (google.api.http).get = "/sapiens-cosmos/ibb/ibb/claim2/{id}";
+	}
+	rpc Claim2All(QueryAllClaim2Request) returns (QueryAllClaim2Response) {
+		option (google.api.http).get = "/sapiens-cosmos/ibb/ibb/claim2";
+	}
+
 	rpc Claim(QueryGetClaimRequest) returns (QueryGetClaimResponse) {
 		option (google.api.http).get = "/sapiens-cosmos/ibb/ibb/claim/{id}";
 	}
@@ -152,6 +160,22 @@ service Query {
 }
 
 // this line is used by starport scaffolding # 3
+message QueryGetClaim2Request {
+	uint64 id = 1;
+}
+
+message QueryGetClaim2Response {
+	Claim2 Claim2 = 1;
+}
+
+message QueryAllClaim2Request {
+	cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+message QueryAllClaim2Response {
+	repeated Claim2 Claim2 = 1;
+	cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
 message QueryGetClaimRequest {
 	uint64 id = 1;
 }

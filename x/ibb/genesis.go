@@ -10,6 +10,14 @@ import (
 // state.
 func InitGenesis(ctx sdk.Context, k keeper.Keeper, genState types.GenesisState) {
 	// this line is used by starport scaffolding # genesis/module/init
+	// Set all the claim2
+	for _, elem := range genState.Claim2List {
+		k.SetClaim2(ctx, *elem)
+	}
+
+	// Set claim2 count
+	k.SetClaim2Count(ctx, uint64(len(genState.Claim2List)))
+
 	// Set all the claim
 	for _, elem := range genState.ClaimList {
 		k.SetClaim(ctx, *elem)
@@ -113,6 +121,13 @@ func ExportGenesis(ctx sdk.Context, k keeper.Keeper) *types.GenesisState {
 	genesis := types.DefaultGenesis()
 
 	// this line is used by starport scaffolding # genesis/module/export
+	// Get all claim2
+	claim2List := k.GetAllClaim2(ctx)
+	for _, elem := range claim2List {
+		elem := elem
+		genesis.Claim2List = append(genesis.Claim2List, &elem)
+	}
+
 	// Get all claim
 	claimList := k.GetAllClaim(ctx)
 	for _, elem := range claimList {
