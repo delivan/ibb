@@ -22,5 +22,22 @@ func (k msgServer) ChooseOffer(goCtx context.Context, msg *types.MsgChooseOffer)
 	queryNft.OwnerAddress = "in escrow"
 	k.SetNft(ctx, queryNft)
 
+	userList := k.GetAllUser(ctx)
+	var queryUser types.User
+	for _, user := range userList {
+		if user.Creator == msg.Creator {
+			queryUser = user
+			break
+		}
+	}
+
+	for i, borrow := range queryUser.Borrow {
+		if borrow.Denom == queryNft.SelectedOffer.Denom {
+			queryUser.Borrow[i].Amount += queryNft.SelectedOffer.Amount
+		}
+	}
+
+	k.SetUser(ctx, queryUser)
+
 	return &types.MsgChooseOfferResponse{}, nil
 }
