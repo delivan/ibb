@@ -31,10 +31,13 @@ func (k msgServer) ChooseOffer(goCtx context.Context, msg *types.MsgChooseOffer)
 		}
 	}
 
-	for i, borrow := range queryUser.Borrow {
-		if borrow.Denom == queryNft.SelectedOffer.Denom {
-			queryUser.Borrow[i].Amount += queryNft.SelectedOffer.Amount
+	for _, offer := range queryNft.Offers {
+		for i, borrow := range queryUser.Borrow {
+			if borrow.Denom == offer.Denom {
+				queryUser.Borrow[i].Amount += offer.Amount
+			}
 		}
+		break
 	}
 
 	k.SetUser(ctx, queryUser)

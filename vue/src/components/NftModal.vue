@@ -354,12 +354,6 @@ export default {
 				},
 				fee: []
 			})
-			await Promise.all([
-				this.$store.dispatch(`sapienscosmos.ibb.ibb/sendMsgCreateBorrow`, {
-					value,
-					fee: []
-				})
-			])
 
 			await Promise.all([
 				this.$store.dispatch('sapienscosmos.ibb.ibb/QueryPoolLoad', {
