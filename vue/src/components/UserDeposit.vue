@@ -7,7 +7,7 @@
 			</div>
 			<div class="net-apy">
 				<div class="title">Net APY</div>
-				<div class="value">{{ pools.reduce((acc, pool) => (acc += pool.AssetDeposit ? pool.DepositApy / 10000 : 0), 0) }}%</div>
+				<div class="value">{{ pools.reduce((acc, pool) => (acc += pool.AssetDeposit ? pool.DepositApy / 10000 : 0), 0).toFixed(2) }}%</div>
 			</div>
 		</div>
 		<div class="asset-table">
@@ -19,13 +19,14 @@
 				<div class="table-cell"><span>Claim Interest</span></div>
 			</div>
 			<div v-if="Array.isArray(pools) && pools.length > 0" class="table-rows">
-				<div v-for="pool in pools" v-bind:key="pool.id" class="table-row" @click="clickAsset(pool)">
+				<div v-for="(pool, index) in pools" v-bind:key="pool.id" class="table-row" @click="clickAsset(pool)">
 					<div class="table-cell">{{ pool.Asset }}</div>
-					<div class="table-cell">{{ pool.DepositApy / 10000 }}%</div>
+					<div class="table-cell">{{ parseFloat(pool.DepositApy / 10000).toFixed(2) }}%</div>
 					<div class="table-cell">{{ pool.AssetDeposit / 1000000 }}</div>
 					<!-- <div class="table-cell"><input type="checkbox" v-model="pool.Collatoral" /></div> -->
 					<div class="table-cell">
-						<button @click="clickClaim(pool, $event)">Claim {{ pool.DepositEarned / 1000000 }}</button>
+						<button v-if="loadingClaimPoolIndecies.some((loadingIndex) => loadingIndex === index)" @click="clickClaim(pool, $event, index)">Loading...</button>
+						<button v-else @click="clickClaim(pool, $event, index)">Claim {{ pool.DepositEarned / 1000000 }}</button>
 					</div>
 				</div>
 			</div>
@@ -117,7 +118,7 @@ export default {
 	name: 'UserDeposit',
 	data() {
 		return {
-			isClaimLoading: false
+			loadingClaimPoolIndecies: []
 		}
 	},
 	computed: {
@@ -147,9 +148,10 @@ export default {
 		clickAsset(pool) {
 			this.$emit('click-asset', pool, 'Deposit')
 		},
-		async clickClaim(pool, e) {
+		async clickClaim(pool, e, loadingIndex) {
 			e.stopPropagation()
-			this.isClaimLoading = true
+			this.loadingClaimPoolIndecies = this.loadingClaimPoolIndecies.concat([loadingIndex])
+			console.log(this.loadingClaimPoolIndecies)
 			const value = {
 				creator: this.$store.getters['common/wallet/address'],
 				asset: pool.Asset,
@@ -159,13 +161,14 @@ export default {
 				value,
 				fee: []
 			})
-			this.isClaimLoading = false
 			await this.$store.dispatch('sapienscosmos.ibb.ibb/QueryUserLoad', {
 				options: { all: true },
 				params: {
 					id: this.$store.getters['common/wallet/address']
 				}
 			})
+			this.loadingClaimPoolIndecies = this.loadingClaimPoolIndecies.filter((index) => index !== loadingIndex)
+			console.log(this.loadingClaimPoolIndecies)
 		}
 	}
 }

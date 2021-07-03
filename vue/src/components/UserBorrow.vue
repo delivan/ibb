@@ -22,7 +22,7 @@
 			<div v-if="Array.isArray(pools)" class="table-rows">
 				<div v-for="pool in pools" v-bind:key="pool.id" class="table-row" @click="clickAsset(pool)">
 					<div class="table-cell">{{ pool.Asset }}</div>
-					<div class="table-cell">{{ pool.BorrowApy / 10000 }}%</div>
+					<div class="table-cell">{{ parseFloat(pool.BorrowApy / 10000).toFixed(2) }}%</div>
 					<div class="table-cell">{{ pool.AssetBorrow / 1000000 }}</div>
 					<div class="table-cell">{{ pool.BorrowAccrued / 100000 }}</div>
 				</div>
