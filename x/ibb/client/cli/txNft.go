@@ -190,7 +190,6 @@ func CmdCreateMockNft() *cobra.Command {
 			tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msgArtCollection2)
 			tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msgArtCollection3)
 			tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msgArtCollection4)
-			tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msgArtCollection4)
 			tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msgCryptoToysCollection1)
 			tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msgCryptoToysCollection2)
 			tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msgCryptoToysCollection3)
