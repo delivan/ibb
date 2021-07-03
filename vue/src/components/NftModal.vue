@@ -336,14 +336,30 @@ export default {
 		async acceptOffer(offer) {
 			this.isAcceptLoading = true
 			const loggedAddress = this.$store.getters['common/wallet/address']
+			const asset = offer.denom.toLocaleUpperCase().split('U').pop()
+			const value = {
+				creator: loggedAddress,
+				blockHeight: 0,
+				asset: asset,
+				amount: offer.amount,
+				denom: offer.denom
+			}
+			console.log(offer)
+
 			await this.$store.dispatch('sapienscosmos.ibb.ibb/sendMsgChooseOffer', {
 				value: {
 					creator: loggedAddress,
 					nftId: offer.nftId,
-					OfferId: offer.id
+					OfferId: parseInt(offer.id)
 				},
 				fee: []
 			})
+			await Promise.all([
+				this.$store.dispatch(`sapienscosmos.ibb.ibb/sendMsgCreateBorrow`, {
+					value,
+					fee: []
+				})
+			])
 
 			await Promise.all([
 				this.$store.dispatch('sapienscosmos.ibb.ibb/QueryPoolLoad', {

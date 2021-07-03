@@ -2,7 +2,7 @@
 	<div class="modal-wrapper" @click="checkClickOutside">
 		<div class="modal">
 			<div class="asset">
-				<img class="asset-icon" src="@/assets/images/icons/atom.png" />
+				<img class="asset-icon" :src="'/' + Asset.toLocaleLowerCase() + '.png'" />
 				<div class="asset-name">{{ Asset }}</div>
 			</div>
 			<div v-if="type === 'Deposit' || type === 'Withdraw'" class="modes">
